@@ -1,0 +1,16 @@
+# http://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-1.0.html
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=CCC_Coin Daemon SNAP
+Comment=testnet
+GenericName=CCC_Coin Digital Currency Daemon Client testnet network
+Exec=ccc_coin-core.daemon-testnet %u
+Terminal=true
+Type=Application
+Icon=${SNAP}/share/pixmaps/ccc_coin_testnet.png
+MimeType=x-scheme-handler/ccc;
+Categories=X-Office;X-Finance;
+Keywords=internet;ccc_coin;zccc;core;wallet;daemon;testnet;snap;launchpad;crypto;digital;currency;coin;token;zerocoin;
+Version=1.0
+Name[en_IN]=cccd_testnet.desktop

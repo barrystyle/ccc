@@ -1,0 +1,3 @@
+usr/local/bin/cccd usr/bin
+usr/local/bin/ccc-cli usr/bin
+debian/examples/ccc.conf etc/ccc
