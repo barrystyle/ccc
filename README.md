@@ -1,6 +1,6 @@
 <h1>Ceiling Cat Coin repository</h1>
-<p> CeilingCatCoin is a digital crypto currency based on blockchain technology to support CeilingCatCoin platform, powered by own CeilingCatCoin blockchain.<p>
-<p> CeilingCatCoin utilizes a Proof of Stake (PoS) consensus system algorithm, allowing all owners of CeilingCatCoin to participate in earning block rewards while securing the network with full node wallets, as well as to run Masternodes to have passive income of Ceiling Cat Coin.<p>
+<p> CeilingCatCoin is a new crypto currency based on blockchain technology.<p>
+<p> CeilingCatCoin utilizes a Proof of work POW allowing his users to mine blocks and therefor gain rewards in CCC.<p>
 
 <br> More information at: <br>
  - Website [CeilingCatCoin](https://ceilingcatcoin.com)
@@ -14,11 +14,11 @@
 <tbody>
 <tr>
 <td>Coin Name & Ticker</td>
-<td>CeilingCatCoin [CeilingCatCoin]</td>
+<td>CeilingCatCoin [CCC]</td>
 </tr>
 <tr>
 <td>Coin Type</td>
-<td>POS + Masternodes</td>
+<td>POW</td>
 </tr>
 <tr>
 <td>Block Time</td>
@@ -26,11 +26,7 @@
 </tr>
 <tr>
 <td>Maximum Supply</td>
-<td>21 000 000 CeilingCatCoin</td>
-</tr>
-<tr>
-<td>Minimum Stake Age</td>
-<td>2 Hour</td>
+<td>Infinite</td>
 </tr>
 <tr>
 <td>Coin Maturity</td>
@@ -54,18 +50,14 @@
 <tr>
 <td class="xl65" style="width: 120px; text-align: center;"><strong>Block Start</strong></td>
 <td class="xl65" style="width: 120px; text-align: center;"><strong>Block End</strong></td>
-<td class="xl65" style="width: 180px; text-align: center;"><strong>Masternode Collateral</strong></td>
-<td class="xl65" style="width: 120px; text-align: center;"><strong>Block Reward</strong></td>
-<td class="xl65" style="width: 120px; text-align: center;"><strong>MN Reward</strong></td>
-<td class="xl66" style="width: 120px; text-align: center;"><strong>POS Reward</strong></td>
+<td class="xl65" style="width: 180px; text-align: center;"><strong>Block 2 untill block 10.000</strong></td>
+<td class="xl65" style="width: 120px; text-align: center;"><strong>Block 10.000 untill Infinite</strong></td>
 </tr>
 <tr>
-<td class="xl65" style="width: 120px; text-align: center;">100</td>
+<td class="xl65" style="width: 120px; text-align: center;">2</td>
 <td class="xl65" style="width: 120px; text-align: center;">Infinity</td>
-<td class="xl65" style="width: 180px; text-align: center;">1000</td>
-<td class="xl65" style="width: 120px; text-align: center;">0.1</td>
-<td class="xl65" style="width: 120px; text-align: center;">0.06</td>
-<td class="xl66" style="width: 120px; text-align: center;">0.04</td>
+<td class="xl65" style="width: 180px; text-align: center;">15.000 CCC Per Block</td>
+<td class="xl65" style="width: 120px; text-align: center;">10.000 CCC Per BLock</td>
 </tr>
 </tbody>
 </table>
