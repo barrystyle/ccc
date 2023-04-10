@@ -5,7 +5,7 @@
 <br> More information at: <br>
  - Website [CeilingCatCoin](https://ceilingcatcoin.com)
  - Block Explorer [EXPLORER](http://explorer.ceilingcatcoin.com)
- - Join community in [DISCORD](https://discord.gg/u7sdY4b6Zb)
+ - Join community in [DISCORD](https://discord.gg/urACDYnMYz)
  - Github [GITHUB](https://github.com/Ceiling-Catz/CCC)
   
   
