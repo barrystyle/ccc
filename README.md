@@ -26,7 +26,7 @@
 </tr>
 <tr>
 <td>Maximum Supply</td>
-<td>Infinite</td>
+<td>5.000.000.000</td>
 </tr>
 <tr>
 <td>Coin Maturity</td>
@@ -48,8 +48,6 @@
 <table border="0" width="600" cellspacing="2" cellpadding="2"><colgroup><col width="26" /><col width="106" /><col width="98" /><col width="126" /><col width="130" /><col width="118" /></colgroup>
 <tbody>
 <tr>
-<td class="xl65" style="width: 120px; text-align: center;"><strong>Block Start</strong></td>
-<td class="xl65" style="width: 120px; text-align: center;"><strong>Block End</strong></td>
 <td class="xl65" style="width: 180px; text-align: center;"><strong>Block 2 until block 7500</strong></td>
 <td class="xl65" style="width: 120px; text-align: center;"><strong>Block 7500 until block 10000</strong></td>
 <td class="xl65" style="width: 120px; text-align: center;"><strong>Block 10000 until block 100000</strong></td>
@@ -57,12 +55,10 @@
 </tr>
 </tr>
 <tr>
-<td class="xl65" style="width: 120px; text-align: center;">2</td>
-<td class="xl65" style="width: 120px; text-align: center;">5.000.000.000</td>
 <td class="xl65" style="width: 180px; text-align: center;">15.000 CCC Per Block</td>
-<td class="xl65" style="width: 120px; text-align: center;">10.000 CCC Per BLock</td>
-<td class="xl65" style="width: 120px; text-align: center;">2.500 CCC Per BLock</td>
-<td class="xl65" style="width: 120px; text-align: center;">1.250 CCC Per BLock</td>
+<td class="xl65" style="width: 120px; text-align: center;">10.000 CCC Per Block</td>
+<td class="xl65" style="width: 120px; text-align: center;">2.500 CCC Per Block</td>
+<td class="xl65" style="width: 120px; text-align: center;">1.250 CCC Per Block</td>
 </tr>
 </tbody>
 </table>
