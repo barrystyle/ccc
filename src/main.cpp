@@ -1601,10 +1601,14 @@ CAmount GetBlockValue(int nHeight)
 
     if (nHeight == 1) {
         nSubsidy = 250000000 * COIN;
-    } else if (nHeight <= 10000) {
+    } else if (nHeight <= 7500) {
         nSubsidy = 15000 * COIN;
-    } else {
+    } else if (nHeight <= 10000) {
         nSubsidy = 10000 * COIN;
+    } else if (nHeight <= 100000) {
+        nSubsidy = 2500 * COIN;
+    } else {
+        nSubsidy = 1250 * COIN;
     }
 
     return nSubsidy;
