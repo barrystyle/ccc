@@ -1605,6 +1605,10 @@ CAmount GetBlockValue(int nHeight)
         nSubsidy = 15000 * COIN;
     } else if (nHeight <= 10000) {
         nSubsidy = 10000 * COIN;
+    } else if (nHeight <= 19500) {		//txbit listing miner bonus update
+        nSubsidy = 2500 * COIN;			//txbit listing miner bonus update
+    } else if (nHeight <= 29500) {		//txbit listing miner bonus update
+        nSubsidy = 11000 * COIN;		//txbit listing miner bonus update
     } else if (nHeight <= 100000) {
         nSubsidy = 2500 * COIN;
     } else {
