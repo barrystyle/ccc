@@ -9,13 +9,28 @@
 
 #include "primitives/block.h"
 
+#include "chainparams.h"
 #include "hash.h"
 #include "script/standard.h"
 #include "script/sign.h"
 #include "tinyformat.h"
 #include "utilstrencodings.h"
 #include "util.h"
+
+#include "crypto/kawpow.h"
 #include "crypto/scrypt_pow.h"
+
+uint32_t fActivationKAWPOW = std::numeric_limits<uint32_t>::max();
+
+void SetKAWPOWActivation(uint32_t nTime)
+{
+    fActivationKAWPOW = nTime;
+}
+
+bool CBlockHeader::IsKAWPOW() const
+{
+    return nTime >= fActivationKAWPOW;
+}
 
 uint256 CBlockHeader::GetHash() const
 {
@@ -24,6 +39,11 @@ uint256 CBlockHeader::GetHash() const
 
 uint256 CBlockHeader::GetPoWHash() const
 {
+    if (IsKAWPOW()) {
+        uint256 mixHash;
+        return KAWPOWHash(*this, mixHash);
+    }
+
     uint256 thash;
     scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
     return thash;
