@@ -330,7 +330,14 @@ crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/sph_jh.h \
   crypto/sph_keccak.h \
   crypto/sph_skein.h \
-  crypto/sph_types.h
+  crypto/sph_types.h \
+  crypto/ethash/lib/ethash/ethash.cpp \
+  crypto/ethash/lib/ethash/primes.c \
+  crypto/ethash/lib/ethash/progpow.cpp \
+  crypto/ethash/lib/keccak/keccak.c \
+  crypto/ethash/lib/keccak/keccakf1600.c \
+  crypto/ethash/lib/keccak/keccakf800.c \
+  crypto/kawpow.cpp
 
 # common: shared between cccd, and ccc-qt and non-server tools
 libbitcoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
