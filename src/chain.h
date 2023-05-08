@@ -224,6 +224,8 @@ public:
     unsigned int nTime{0};
     unsigned int nBits{0};
     unsigned int nNonce{0};
+    uint64_t nNonce64{0};
+    uint256 mixHash{};
 
     //! (memory only) Sequential id assigned to distinguish order in which blocks are received.
     uint32_t nSequenceId{0};
@@ -309,7 +311,6 @@ public:
         if (nStatus & BLOCK_HAVE_UNDO)
             READWRITE(VARINT(nUndoPos));
 
-
          READWRITE(nFlags);
          READWRITE(this->nVersion);
          READWRITE(vStakeModifier);
@@ -317,7 +318,12 @@ public:
          READWRITE(hashMerkleRoot);
          READWRITE(nTime);
          READWRITE(nBits);
-         READWRITE(nNonce);        
+         if (nTime < fActivationKAWPOW) {
+             READWRITE(nNonce);
+         } else {
+             READWRITE(nNonce64);
+             READWRITE(mixHash);
+         }
     }
 
 
@@ -330,6 +336,9 @@ public:
         block.nTime = nTime;
         block.nBits = nBits;
         block.nNonce = nNonce;
+        block.nHeight = nHeight;
+        block.nNonce64 = nNonce64;
+        block.mixHash = mixHash;
         return block.GetHash();
     }
 

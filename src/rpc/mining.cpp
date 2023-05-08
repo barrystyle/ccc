@@ -11,11 +11,13 @@
 #include "base58.h"
 #include "chainparams.h"
 #include "core_io.h"
+#include "consensus/merkle.h"
 #include "init.h"
 #include "main.h"
 #include "miner.h"
 #include "net.h"
 #include "pow.h"
+#include "primitives/block.h"
 #include "rpc/server.h"
 #include "util.h"
 #include "validationinterface.h"
@@ -30,6 +32,11 @@
 
 #include <univalue.h>
 
+#include <crypto/kawpow.h>
+#include <crypto/ethash/include/ethash/ethash.hpp>
+#include <crypto/ethash/include/ethash/progpow.hpp>
+
+std::map<std::string, CBlock> mapRVNKAWBlockTemplates;
 
 /**
  * Return average network hashes per second based on the last 'lookup' blocks,
@@ -166,18 +173,25 @@ UniValue generate(const UniValue& params, bool fHelp)
         if (!pblocktemplate.get()) break;
         CBlock *pblock = &pblocktemplate->block;
 
+        uint256 mix_hash;
+
         if(!fPoS) {
             {
                 LOCK(cs_main);
                 IncrementExtraNonce(pblock, chainActive.Tip(), nExtraNonce);
             }
-            while (pblock->nNonce < std::numeric_limits<uint32_t>::max() &&
-                    !CheckProofOfWork(pblock->GetPoWHash(), pblock->nBits)) {
-                ++pblock->nNonce;
+            while (!CheckProofOfWork(KAWPOWHash(*pblock, mix_hash), pblock->nBits)) {
+                if (pblock->nTime < fActivationKAWPOW) {
+                    ++pblock->nNonce;
+                } else  {
+                    ++pblock->nNonce64;
+                }
             }
             if (ShutdownRequested()) break;
-            if (pblock->nNonce == std::numeric_limits<uint32_t>::max()) continue;
         }
+
+        // KAWPOW Assign the mix_hash to the block that was found
+        pblock->mixHash = mix_hash;
 
         CValidationState state;
         if (!ProcessNewBlock(state, nullptr, pblock))
@@ -534,6 +548,7 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
         (mempool.GetTransactionsUpdated() != nTransactionsUpdatedLast && GetTime() - nStart > 5)) {
         // Clear pindexPrev so future calls make a new block, despite any failures from here on
         pindexPrev = NULL;
+        mapRVNKAWBlockTemplates.clear();
 
         // Store the chainActive.Tip() used before CreateNewBlock, to avoid races
         nTransactionsUpdatedLast = mempool.GetTransactionsUpdated();
@@ -545,7 +560,22 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
             delete pblocktemplate;
             pblocktemplate = NULL;
         }
-        CScript scriptDummy = CScript() << OP_TRUE;
+
+        // Get mining address if it is set
+        CScript scriptDummy;
+        std::string address = GetArg("-miningaddress", "");
+        if (!address.empty()) {
+            CTxDestination dest = DecodeDestination(address);
+
+            if (IsValidDestination(dest)) {
+                scriptDummy = GetScriptForDestination(dest);
+            } else {
+                throw JSONRPCError(RPC_INVALID_PARAMETER, "-miningaddress is not a valid address. Please use a valid address");
+            }
+        } else {
+            scriptDummy = CScript() << OP_TRUE;
+        }
+
         pblocktemplate = CreateNewBlock(scriptDummy, pwalletMain, false);
         if (!pblocktemplate)
             throw JSONRPCError(RPC_OUT_OF_MEMORY, "Out of memory");
@@ -636,6 +666,26 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
     }
 
     result.push_back(Pair("enforce_masternode_payments", true));
+
+    if (pblock->nTime >= fActivationKAWPOW) {
+        std::string address = GetArg("-miningaddress", "");
+        if (IsValidDestinationString(address)) {
+            static std::string lastheader = "";
+            if (mapRVNKAWBlockTemplates.count(lastheader)) {
+                if (pblock->nTime - 30 < mapRVNKAWBlockTemplates.at(lastheader).nTime) {
+                    result.push_back(Pair("pprpcheader", lastheader));
+                    result.push_back(Pair("pprpcepoch", ethash::get_epoch_number(pblock->nHeight)));
+                    return result;
+                }
+            }
+
+            pblock->hashMerkleRoot = BlockMerkleRoot(*pblock);
+            result.push_back(Pair("pprpcheader", GetKAWPOWHeaderHash(*pblock).GetHex()));
+            result.push_back(Pair("pprpcepoch", ethash::get_epoch_number(pblock->nHeight)));
+            mapRVNKAWBlockTemplates[GetKAWPOWHeaderHash(*pblock).GetHex()] = *pblock;
+            lastheader = GetKAWPOWHeaderHash(*pblock).GetHex();
+        }
+    }
 
     return result;
 }

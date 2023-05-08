@@ -14,6 +14,9 @@
 #include "serialize.h"
 #include "uint256.h"
 
+extern uint32_t fActivationKAWPOW;
+void SetKAWPOWActivation(uint32_t nTime);
+
 /** Nodes collect new transactions into a block, hash them into a hash tree,
  * and scan through nonce values to make the block's hash satisfy proof-of-work
  * requirements.  When they solve the proof-of-work, they broadcast the block
@@ -33,6 +36,10 @@ public:
     uint32_t nBits;
     uint32_t nNonce;
 
+    uint32_t nHeight;
+    uint64_t nNonce64;
+    uint256 mixHash;
+
     CBlockHeader()
     {
         SetNull();
@@ -47,7 +54,13 @@ public:
         READWRITE(hashMerkleRoot);
         READWRITE(nTime);
         READWRITE(nBits);
-        READWRITE(nNonce);
+        if (!IsKAWPOW()) {
+            READWRITE(nNonce);
+        } else {
+            READWRITE(nHeight);
+            READWRITE(nNonce64);
+            READWRITE(mixHash);
+        }
     }
 
     void SetNull()
@@ -58,6 +71,9 @@ public:
         nTime = 0;
         nBits = 0;
         nNonce = 0;
+        nHeight = 0;
+        nNonce64 = 0;
+        mixHash.SetNull();
     }
 
     bool IsNull() const
@@ -66,8 +82,8 @@ public:
     }
 
     uint256 GetHash() const;
-
     uint256 GetPoWHash() const;
+    bool IsKAWPOW() const;
 
     int64_t GetBlockTime() const
     {
@@ -150,6 +166,32 @@ public:
     void print() const;
 };
 
+
+/**
+ * Custom serializer for CBlockHeader that omits the nNonce and mixHash, for use
+ * as input to ProgPow.
+ */
+class CKAWPOWInput : private CBlockHeader
+{
+public:
+    CKAWPOWInput(const CBlockHeader &header)
+    {
+        CBlockHeader::SetNull();
+        *((CBlockHeader*)this) = header;
+    }
+
+    ADD_SERIALIZE_METHODS;
+
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action) {
+        READWRITE(nVersion);
+        READWRITE(hashPrevBlock);
+        READWRITE(hashMerkleRoot);
+        READWRITE(nTime);
+        READWRITE(nBits);
+        READWRITE(nHeight);
+    }
+};
 
 /** Describes a place in the block chain to another node such that if the
  * other node doesn't have the same branch, it can find a recent common trunk.

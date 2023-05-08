@@ -242,6 +242,11 @@ bool CBlockTreeDB::LoadBlockIndexGuts()
                 pindexNew->nFlags = diskindex.nFlags;
                 pindexNew->vStakeModifier = diskindex.vStakeModifier;
 
+                // kawpow
+                pindexNew->nNonce64       = diskindex.nNonce64;
+                pindexNew->mixHash        = diskindex.mixHash;
+                pindexNew->nHeight        = diskindex.nHeight;
+
                 // CC: Disable checks like Litecoin does for Scrypt support
                 //if (pindexNew->nHeight <= Params().GetConsensus().height_last_PoW) {
                 //    if (!CheckProofOfWork(pindexNew->GetBlockHash(), pindexNew->nBits))
