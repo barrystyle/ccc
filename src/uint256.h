@@ -68,6 +68,15 @@ public:
     uint256& SetCompact(uint32_t nCompact, bool* pfNegative = nullptr, bool* pfOverflow = nullptr);
     uint32_t GetCompact(bool fNegative = false) const;
     uint64_t GetHash(const uint256& salt) const;
+
+    int GetNibble(int index) const
+    {
+        index = 63 - index;
+        if (index % 2 == 1) {
+            return (pn[index / 2] >> 4);
+        }
+        return (pn[index / 2] & 0xf);
+    }
 };
 
 /** 512-bit unsigned big integer. */
