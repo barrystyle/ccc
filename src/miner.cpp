@@ -361,7 +361,6 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
             } else {
                 CAmount blockValue = nFees + GetBlockValue(pindexPrev->nHeight + 1);
                 txNew.vout[0].nValue = blockValue;
-                
             }
         }
 
@@ -382,8 +381,8 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
             UpdateTime(pblock, pindexPrev);
         pblock->nBits = GetNextWorkRequired(pindexPrev, pblock);
         pblock->nNonce = 0;
-        pblock->nNonce64         = 0;
-        pblock->nHeight          = nHeight;
+        pblock->nNonce64 = 0;
+        pblock->nHeight = nHeight;
         pblocktemplate->vTxSigOps[0] = GetLegacySigOpCount(pblock->vtx[0]);
 
         if (fProofOfStake) {

@@ -196,13 +196,11 @@ public:
     {
         networkID = CBaseChainParams::TESTNET;
         strNetworkID = "test";
-/*
-//! Modify the TESTNET genesis block so the timestamp is valid for a later start.
-*/
-        genesis = CreateGenesisBlock(1610066000, 0, "Lorem ipsum dolor sit amet, consectetur adipiscing elit");
+
+        genesis = CreateGenesisBlock(1680947030, 3703410, "Pilot applauded for his courage after finding a cobra in the cockpit mid-flight");
         consensus.hashGenesisBlock = genesis.GetHash();
-	//assert(consensus.hashGenesisBlock == uint256S("0x001"));
-        //assert(genesis.hashMerkleRoot == uint256S("0x001"));
+        assert(genesis.hashMerkleRoot == uint256("3df22896ffc77d8d740ac3b9925ba899e21d165d5ac4c2780a44fdecd9f99967"));
+        assert(consensus.hashGenesisBlock == uint256("17121853915c8e6036c3b813cae096312b8ffaff3b33b51a770e22c357c6b895"));
 
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.powLimit   = ~UINT256_ZERO >> 16;   // ccc starting difficulty is 1 / 2^12
@@ -214,7 +212,7 @@ public:
         consensus.nFutureTimeDriftPoW = 7200;
         consensus.nFutureTimeDriftPoS = 180;
         consensus.nMasternodeCountDrift = 20;       // num of MN we allow the see-saw payments to be off by
-        consensus.nMaxMoneyOut = 99000000 * COIN;
+        consensus.nMaxMoneyOut = 250000000 * COIN;
         consensus.nPoolMaxTransactions = 3;
         consensus.nProposalEstablishmentTime = 60 * 60 * 24;    // must be at least a day old to make it into a budget
         consensus.nStakeMinAge = 60 * 60;
