@@ -1441,6 +1441,12 @@ bool AppInit2()
     SoftSetBoolArg("-staking", false);
     SoftSetBoolArg("-masternode", false);
 
+    // ********************************************************* Step 6.5: kawpow params
+    if (Params().GetConsensus().nKAWPOWActivation != std::numeric_limits<uint32_t>::max()) {
+        fActivationKAWPOW = Params().GetConsensus().nKAWPOWActivation;
+        LogPrintf("KAWPOW hash algorithm activated at %d\n", fActivationKAWPOW);
+    }
+
     // ********************************************************* Step 7: load block chain
 
     fReindex = GetBoolArg("-reindex", false);

@@ -124,8 +124,8 @@ public:
         consensus.nTimeSlotLength = 15;
         consensus.devAddress = "CCCdisabledXXXXXXXXXXXXXXXXXXXXXX";
 
-        SetKAWPOWActivation(std::numeric_limits<uint32_t>::max());
-				
+        consensus.nKAWPOWActivation = std::numeric_limits<uint32_t>::max();
+
         // spork key
         consensus.strSporkPubKey = "04638c049e470eee6fc99c6398018b183c21c4058e067be44ce88ae1f5d20519e11070a23101625050e4a159f1cff2c6d18218a0076b191e14b9c27df1c199cc6f";
 
@@ -225,7 +225,7 @@ public:
         consensus.nTimeSlotLength = 15;
         consensus.devAddress = "RSGQZGPGzxMNQkNB5KPPbEDuEPaJytMY6q";
 
-        SetKAWPOWActivation(std::numeric_limits<uint32_t>::max());
+        consensus.nKAWPOWActivation = 1683634832;
 
         // spork key
         consensus.strSporkPubKey = "04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f";
@@ -322,6 +322,8 @@ public:
         consensus.nTargetSpacing = 1 * 60;
         consensus.nTimeSlotLength = 15;
         consensus.devAddress = "RSGQZGPGzxMNQkNB5KPPbEDuEPaJytMY6q";
+
+        consensus.nKAWPOWActivation = std::numeric_limits<uint32_t>::max();
 
         /* Spork Key for RegTest:
         WIF private key: 932HEevBSujW2ud7RfB1YF91AFygbBRQj3de3LyaCRqNzKKgWXi
