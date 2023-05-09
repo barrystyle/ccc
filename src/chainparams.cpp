@@ -124,8 +124,8 @@ public:
         consensus.nTimeSlotLength = 15;
         consensus.devAddress = "CCCdisabledXXXXXXXXXXXXXXXXXXXXXX";
 
-        SetKAWPOWActivation(std::numeric_limits<uint32_t>::max());
-				
+        consensus.nKAWPOWActivation = std::numeric_limits<uint32_t>::max();
+
         // spork key
         consensus.strSporkPubKey = "04638c049e470eee6fc99c6398018b183c21c4058e067be44ce88ae1f5d20519e11070a23101625050e4a159f1cff2c6d18218a0076b191e14b9c27df1c199cc6f";
 
@@ -196,13 +196,11 @@ public:
     {
         networkID = CBaseChainParams::TESTNET;
         strNetworkID = "test";
-/*
-//! Modify the TESTNET genesis block so the timestamp is valid for a later start.
-*/
-        genesis = CreateGenesisBlock(1610066000, 0, "Lorem ipsum dolor sit amet, consectetur adipiscing elit");
+
+        genesis = CreateGenesisBlock(1680947030, 3703410, "Pilot applauded for his courage after finding a cobra in the cockpit mid-flight");
         consensus.hashGenesisBlock = genesis.GetHash();
-	//assert(consensus.hashGenesisBlock == uint256S("0x001"));
-        //assert(genesis.hashMerkleRoot == uint256S("0x001"));
+        assert(genesis.hashMerkleRoot == uint256("3df22896ffc77d8d740ac3b9925ba899e21d165d5ac4c2780a44fdecd9f99967"));
+        assert(consensus.hashGenesisBlock == uint256("17121853915c8e6036c3b813cae096312b8ffaff3b33b51a770e22c357c6b895"));
 
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.powLimit   = ~UINT256_ZERO >> 16;   // ccc starting difficulty is 1 / 2^12
@@ -214,7 +212,7 @@ public:
         consensus.nFutureTimeDriftPoW = 7200;
         consensus.nFutureTimeDriftPoS = 180;
         consensus.nMasternodeCountDrift = 20;       // num of MN we allow the see-saw payments to be off by
-        consensus.nMaxMoneyOut = 99000000 * COIN;
+        consensus.nMaxMoneyOut = 250000000 * COIN;
         consensus.nPoolMaxTransactions = 3;
         consensus.nProposalEstablishmentTime = 60 * 60 * 24;    // must be at least a day old to make it into a budget
         consensus.nStakeMinAge = 60 * 60;
@@ -225,7 +223,7 @@ public:
         consensus.nTimeSlotLength = 15;
         consensus.devAddress = "RSGQZGPGzxMNQkNB5KPPbEDuEPaJytMY6q";
 
-        SetKAWPOWActivation(std::numeric_limits<uint32_t>::max());
+        consensus.nKAWPOWActivation = 1683634832;
 
         // spork key
         consensus.strSporkPubKey = "04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f";
@@ -322,6 +320,8 @@ public:
         consensus.nTargetSpacing = 1 * 60;
         consensus.nTimeSlotLength = 15;
         consensus.devAddress = "RSGQZGPGzxMNQkNB5KPPbEDuEPaJytMY6q";
+
+        consensus.nKAWPOWActivation = std::numeric_limits<uint32_t>::max();
 
         /* Spork Key for RegTest:
         WIF private key: 932HEevBSujW2ud7RfB1YF91AFygbBRQj3de3LyaCRqNzKKgWXi

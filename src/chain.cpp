@@ -70,7 +70,9 @@ CBlockIndex::CBlockIndex(const CBlock& block):
         hashMerkleRoot{block.hashMerkleRoot},
         nTime{block.nTime},
         nBits{block.nBits},
-        nNonce{block.nNonce}
+        nNonce{block.nNonce},
+        nNonce64{block.nNonce64},
+        mixHash{block.mixHash}
 {
     if (block.IsProofOfStake())
         SetProofOfStake();
@@ -113,6 +115,9 @@ CBlockHeader CBlockIndex::GetBlockHeader() const
     block.nTime = nTime;
     block.nBits = nBits;
     block.nNonce = nNonce;
+    block.nHeight = nHeight;
+    block.nNonce64 = nNonce64;
+    block.mixHash = mixHash;
     return block;
 }
 

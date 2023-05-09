@@ -104,6 +104,8 @@ struct Params {
     int nTimeSlotLength;
     std::string devAddress;
 
+    int nKAWPOWActivation;
+
     // spork keys
     std::string strSporkPubKey;
 

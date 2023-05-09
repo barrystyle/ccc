@@ -142,9 +142,6 @@ UniValue generate(const UniValue& params, bool fHelp)
             + HelpExampleCli("generate", "11")
         );
 
-    if (!Params().IsRegTestNet())
-        throw JSONRPCError(RPC_METHOD_NOT_FOUND, "This method can only be used on regtest");
-
     const int nGenerate = params[0].get_int();
     int nHeightEnd = 0;
     int nHeight = 0;
@@ -771,6 +768,83 @@ UniValue submitblock(const UniValue& params, bool fHelp)
     }
     return BIP22ValidationResult(state);
 }
+
+UniValue pprpcsb(const UniValue& params, bool fHelp) {
+    if (fHelp || params.size() != 3) {
+        throw std::runtime_error(
+                "pprpcsb \"header_hash\" \"mix_hash\" \"nonce\"\n"
+                "\nAttempts to submit new block to network mined by kawpow gpu miner via rpc.\n"
+
+                "\nArguments\n"
+                "1. \"header_hash\"        (string, required) the prow_pow header hash that was given to the gpu miner from this rpc client\n"
+                "2. \"mix_hash\"           (string, required) the mix hash that was mined by the gpu miner via rpc\n"
+                "3. \"nonce\"              (string, required) the nonce of the block that hashed the valid block\n"
+                "\nResult:\n"
+                "\nExamples:\n"
+                + HelpExampleCli("pprpcsb", "\"header_hash\" \"mix_hash\" 100000")
+                + HelpExampleRpc("pprpcsb", "\"header_hash\" \"mix_hash\" 100000")
+        );
+    }
+
+    std::string header_hash = params[0].get_str();
+    std::string mix_hash = params[1].get_str();
+    std::string str_nonce = params[2].get_str();
+
+    uint64_t nonce;
+    if (!ParseUInt64(str_nonce, &nonce, 16))
+        throw JSONRPCError(RPC_INVALID_PARAMS, "Invalid hex nonce");
+
+    if (!mapRVNKAWBlockTemplates.count(header_hash))
+        throw JSONRPCError(RPC_INVALID_PARAMS, "Block header hash not found in block data");
+
+    std::shared_ptr<CBlock> blockptr = std::make_shared<CBlock>();
+    *blockptr = mapRVNKAWBlockTemplates.at(header_hash);
+
+    blockptr->nNonce64 = nonce;
+    blockptr->mixHash = uint256S(mix_hash);
+
+    if (blockptr->vtx.empty() || !blockptr->vtx[0].IsCoinBase()) {
+        throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "Block does not start with a coinbase");
+    }
+
+    uint256 retMixHash;
+    if (!CheckProofOfWork(KAWPOWHash(*blockptr, retMixHash), blockptr->nBits))
+        throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "Block does not solve the boundary");
+
+    uint256 hash = blockptr->GetHash();
+    bool fBlockPresent = false;
+    {
+        LOCK(cs_main);
+        BlockMap::iterator mi = mapBlockIndex.find(hash);
+        if (mi != mapBlockIndex.end()) {
+            CBlockIndex* pindex = mi->second;
+            if (pindex->IsValid(BLOCK_VALID_SCRIPTS))
+                return "duplicate";
+            if (pindex->nStatus & BLOCK_FAILED_MASK)
+                return "duplicate-invalid";
+            // Otherwise, we might only have the header - process the block before returning
+            fBlockPresent = true;
+        }
+    }
+
+    CValidationState state;
+    submitblock_StateCatcher sc(hash);
+    RegisterValidationInterface(&sc);
+    bool fAccepted = ProcessNewBlock(state, NULL, blockptr.get());
+    UnregisterValidationInterface(&sc);
+    if (fBlockPresent) {
+        if (fAccepted && !sc.found)
+            return "duplicate-inconclusive";
+        return "duplicate";
+    }
+    if (fAccepted) {
+        if (!sc.found)
+            return "inconclusive";
+        state = sc.state;
+    }
+    return BIP22ValidationResult(state);
+}
+
 
 UniValue estimatefee(const UniValue& params, bool fHelp)
 {
