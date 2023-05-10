@@ -74,6 +74,7 @@ UniValue blockheaderToJSON(const CBlockIndex* blockindex)
 {
     UniValue result(UniValue::VOBJ);
     result.push_back(Pair("hash", blockindex->GetBlockHash().GetHex()));
+    result.push_back(Pair("pow_hash", blockindex->GetBlockHeader().GetPoWHash().GetHex()));
     int confirmations = -1;
     // Only report confirmations if the block is on the main chain
     if (chainActive.Contains(blockindex))
@@ -84,7 +85,12 @@ UniValue blockheaderToJSON(const CBlockIndex* blockindex)
     result.push_back(Pair("merkleroot", blockindex->hashMerkleRoot.GetHex()));
     result.push_back(Pair("time", (int64_t)blockindex->nTime));
     result.push_back(Pair("mediantime", (int64_t)blockindex->GetMedianTimePast()));
-    result.push_back(Pair("nonce", (uint64_t)blockindex->nNonce));
+    if (blockindex->nTime < fActivationKAWPOW) {
+        result.push_back(Pair("nonce", (uint64_t)blockindex->nNonce));
+    } else {
+        result.push_back(Pair("nonce64", blockindex->nNonce64));
+        result.push_back(Pair("mixhash", blockindex->mixHash.GetHex()));
+    }
     result.push_back(Pair("bits", strprintf("%08x", blockindex->nBits)));
     result.push_back(Pair("difficulty", GetDifficulty(blockindex)));
     result.push_back(Pair("chainwork", blockindex->nChainWork.GetHex()));
@@ -101,6 +107,7 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
 {
     UniValue result(UniValue::VOBJ);
     result.push_back(Pair("hash", block.GetHash().GetHex()));
+    result.push_back(Pair("pow_hash", block.GetPoWHash().GetHex()));
     int confirmations = -1;
     // Only report confirmations if the block is on the main chain
     if (chainActive.Contains(blockindex))
@@ -122,7 +129,12 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
     result.push_back(Pair("tx", txs));
     result.push_back(Pair("time", block.GetBlockTime()));
     result.push_back(Pair("mediantime", (int64_t)blockindex->GetMedianTimePast()));
-    result.push_back(Pair("nonce", (uint64_t)block.nNonce));
+    if (blockindex->nTime < fActivationKAWPOW) {
+        result.push_back(Pair("nonce", (uint64_t)block.nNonce));
+    } else {
+        result.push_back(Pair("nonce64", block.nNonce64));
+        result.push_back(Pair("mixhash", block.mixHash.GetHex()));
+    }
     result.push_back(Pair("bits", strprintf("%08x", block.nBits)));
     result.push_back(Pair("difficulty", GetDifficulty(blockindex)));
     result.push_back(Pair("chainwork", blockindex->nChainWork.GetHex()));
