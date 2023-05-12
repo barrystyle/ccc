@@ -124,7 +124,7 @@ public:
         consensus.nTimeSlotLength = 15;
         consensus.devAddress = "CCCdisabledXXXXXXXXXXXXXXXXXXXXXX";
 
-        consensus.nKAWPOWActivation = std::numeric_limits<uint32_t>::max();
+        consensus.nKAWPOWActivation = 1684250127;
 
         // spork key
         consensus.strSporkPubKey = "04638c049e470eee6fc99c6398018b183c21c4058e067be44ce88ae1f5d20519e11070a23101625050e4a159f1cff2c6d18218a0076b191e14b9c27df1c199cc6f";
