@@ -4874,8 +4874,12 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
             return false;
         }
 
-        if (pfrom->DisconnectOldProtocol(ActiveProtocol(), strCommand))
+        if (pfrom->nVersion < MIN_PEER_PROTO_VERSION) {
+            // disconnect from peers older than this proto version
+            LogPrint(BCLog::NET, "peer=%d using obsolete version %i; disconnecting\n", pfrom->id, pfrom->nVersion);
+            pfrom->fDisconnect = true;
             return false;
+        }
 
         if (pfrom->nVersion == 10300)
             pfrom->nVersion = 300;
@@ -4998,6 +5002,11 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
         }
     }
 
+    else if (pfrom->nVersion < PROTOCOL_VERSION && (GetAdjustedTime() >= Params().GetConsensus().nKAWPOWActivation)) {
+        LogPrint(BCLog::NET, "peer=%d using obsolete version %i (after fork); disconnecting\n", pfrom->id, pfrom->nVersion);
+        pfrom->fDisconnect = true;
+        return false;
+    }
 
     else if (strCommand == NetMsgType::ADDR) {
         std::vector<CAddress> vAddr;
@@ -5417,8 +5426,6 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
                         if(lockMain) Misbehaving(pfrom->GetId(), nDoS);
                     }
                 }
-                //disconnect this node if its old protocol version
-                pfrom->DisconnectOldProtocol(ActiveProtocol(), strCommand);
             } else {
                 LogPrint(BCLog::NET, "%s : Already processed block %s, skipping ProcessNewBlock()\n", __func__, block.GetHash().GetHex());
             }
@@ -5642,21 +5649,9 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
     return true;
 }
 
-// Note: whenever a protocol update is needed toggle between both implementations (comment out the formerly active one)
-//       so we can leave the existing clients untouched (old SPORK will stay on so they don't see even older clients).
-//       Those old clients won't react to the changes of the other (new) SPORK because at the time of their implementation
-//       it was the one which was commented out
 int ActiveProtocol()
 {
-    // SPORK_14 is used for 70920 (v1.1.0)
-    if (sporkManager.IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT))
-            return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
-
-    // SPORK_15 was used for 70919 (v1.0.0), commented out now.
-    //if (sporkManager.IsSporkActive(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2))
-    //        return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
-
-    return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
+    return PROTOCOL_VERSION;
 }
 
 // requires LOCK(cs_vRecvMsg)
