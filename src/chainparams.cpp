@@ -59,10 +59,19 @@ static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, const char* ps
  * + Contains no strange transactions
  */
 static Checkpoints::MapCheckpoints mapCheckpoints =
-    boost::assign::map_list_of(0, uint256S("17121853915c8e6036c3b813cae096312b8ffaff3b33b51a770e22c357c6b895"))/*
-	(1000, uint256S("0x0000006b43065fdf445f07adca57fe5fd888902cb79c16fa48302cf1c0ab88ce"))
-	(10000, uint256S("0xa2fd284213d913463d827c166ed0220b30de857794956b9dfbaaa5395891ef32"))
-	(20000, uint256S("0x85acbdc4e8b609ddb3584c15f94248cc08d85c337736c12422f3e84a5bc51c4a"))*/;
+    boost::assign::map_list_of(0, uint256S("17121853915c8e6036c3b813cae096312b8ffaff3b33b51a770e22c357c6b895"))
+    (1500, uint256S("8bdbc733a41c288bc63f57d68cfc56df9cf4e2d519dbfa1062de7bc749bd7154"))
+    (8500, uint256S("2c09cd4ca28d8eaeadaf79d54333d1b4882caf9a7f1512ed596806e19e9caaba"))
+    (32200, uint256S("b2540e8f17d87207fb917f9d5220fa064e124a66051bb6d941473720df7517f4"))
+    (51000, uint256S("2355533f52835b4967dd4960b0acda622726da5e24f9d33cf243758765a2ee5b"))
+    (98000, uint256S("129a066f0f5b06da64f94a20d840455c50906f9d2d87338c1df50f969a9d3ec8"))
+    (197770, uint256S("3283fed2ce29fda12135b2c47248372f72a40cf547e1c5671b1ce7477d366fd6"))
+    (197773, uint256S("668c867c34b2b2f20bd7537874c2cd6531a88e1df7076a2fb5cfc6ad5481be7d"))
+    (197775, uint256S("65fb6469df2b9e74384efd1222a22532ed4655af86943a2e6bfc5b49b5b86ec6"))
+    (197779, uint256S("5cda91155f948d8a054ff2e792e7ad1ba1ecb8300de20baef95cc88970128604"))
+    (197780, uint256S("77f6204053a8e301ff5b10e4979adc1db012f562f6d45f164192e776ee2ed82d"))
+    (197781, uint256S("f0275877010fcf7ca9d756756ccae634a28682685bf488cc12312683ca925524")) //split of chain
+    ;
 
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
