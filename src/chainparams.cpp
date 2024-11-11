@@ -18,6 +18,19 @@
 
 #include <assert.h>
 
+void SolveAlternateGenesis(CBlock& genesis, uint32_t nTime, uint256& powLimit)
+{
+    genesis.nTime = nTime;
+    genesis.nNonce = 0;
+
+    while (genesis.GetPoWHash() > powLimit) {
+        printf("\r%08x", genesis.nNonce);
+        ++genesis.nNonce;
+    }
+
+    printf("\n%s\n", genesis.ToString().c_str());
+}
+
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     CMutableTransaction txNew;
@@ -107,11 +120,6 @@ public:
         networkID = CBaseChainParams::MAIN;
         strNetworkID = "main";
 
-        genesis = CreateGenesisBlock(1680947030, 3703410, "Pilot applauded for his courage after finding a cobra in the cockpit mid-flight");
-        consensus.hashGenesisBlock = genesis.GetHash();
-        assert(genesis.hashMerkleRoot == uint256("3df22896ffc77d8d740ac3b9925ba899e21d165d5ac4c2780a44fdecd9f99967"));
-        assert(consensus.hashGenesisBlock == uint256("17121853915c8e6036c3b813cae096312b8ffaff3b33b51a770e22c357c6b895"));
-
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.powLimit   = ~UINT256_ZERO >> 18;   // ccc starting difficulty is 1 / 2^12
         consensus.posLimitV1 = ~UINT256_ZERO >> 24;
@@ -164,6 +172,12 @@ public:
         pchMessageStart[2] = 0x1e;
         pchMessageStart[3] = 0x2c;
         nDefaultPort = 7979;
+
+        genesis = CreateGenesisBlock(1680947030, 3703410, "Pilot applauded for his courage after finding a cobra in the cockpit mid-flight");
+        SolveAlternateGenesis(genesis, 1731146578, consensus.powLimit);
+        consensus.hashGenesisBlock = genesis.GetHash();
+//      assert(genesis.hashMerkleRoot == uint256("3df22896ffc77d8d740ac3b9925ba899e21d165d5ac4c2780a44fdecd9f99967"));
+//      assert(consensus.hashGenesisBlock == uint256("17121853915c8e6036c3b813cae096312b8ffaff3b33b51a770e22c357c6b895"));
 
         vSeeds.push_back(CDNSSeedData("206.71.149.163", "65.38.120.99"));
         vSeeds.push_back(CDNSSeedData("192.153.57.72", "168.100.9.124"));
