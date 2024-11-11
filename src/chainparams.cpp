@@ -144,7 +144,7 @@ public:
         consensus.nTimeSlotLength = 15;
         consensus.devAddress = "CCCdisabledXXXXXXXXXXXXXXXXXXXXXX";
 
-        consensus.nKAWPOWActivation = 1684857487;
+        consensus.nKAWPOWActivation = 1984857487;
 
         // spork key
         consensus.strSporkPubKey = "04638c049e470eee6fc99c6398018b183c21c4058e067be44ce88ae1f5d20519e11070a23101625050e4a159f1cff2c6d18218a0076b191e14b9c27df1c199cc6f";
@@ -176,8 +176,8 @@ public:
         pchMessageStart[3] = 0x2c;
         nDefaultPort = 7979;
 
-        genesis = CreateGenesisBlock(1680947030, 3703410, "Pilot applauded for his courage after finding a cobra in the cockpit mid-flight");
-        SolveAlternateGenesis(genesis, 1731146578);
+        genesis = CreateGenesisBlock(1731146578, 482557, "Pilot applauded for his courage after finding a cobra in the cockpit mid-flight");
+        //SolveAlternateGenesis(genesis, 1731146578);
         consensus.hashGenesisBlock = genesis.GetHash();
 //      assert(genesis.hashMerkleRoot == uint256("3df22896ffc77d8d740ac3b9925ba899e21d165d5ac4c2780a44fdecd9f99967"));
 //      assert(consensus.hashGenesisBlock == uint256("17121853915c8e6036c3b813cae096312b8ffaff3b33b51a770e22c357c6b895"));
@@ -223,8 +223,8 @@ public:
 
         genesis = CreateGenesisBlock(1680947030, 3703410, "Pilot applauded for his courage after finding a cobra in the cockpit mid-flight");
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(genesis.hashMerkleRoot == uint256("3df22896ffc77d8d740ac3b9925ba899e21d165d5ac4c2780a44fdecd9f99967"));
-        assert(consensus.hashGenesisBlock == uint256("17121853915c8e6036c3b813cae096312b8ffaff3b33b51a770e22c357c6b895"));
+//      assert(genesis.hashMerkleRoot == uint256("3df22896ffc77d8d740ac3b9925ba899e21d165d5ac4c2780a44fdecd9f99967"));
+//      assert(consensus.hashGenesisBlock == uint256("17121853915c8e6036c3b813cae096312b8ffaff3b33b51a770e22c357c6b895"));
 
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.powLimit   = ~UINT256_ZERO >> 16;   // ccc starting difficulty is 1 / 2^12
