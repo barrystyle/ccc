@@ -18,10 +18,13 @@
 
 #include <assert.h>
 
-void SolveAlternateGenesis(CBlock& genesis, uint32_t nTime, uint256& powLimit)
+void SolveAlternateGenesis(CBlock& genesis, uint32_t nTime)
 {
     genesis.nTime = nTime;
     genesis.nNonce = 0;
+
+    uint256 powLimit;
+    powLimit.SetCompact(genesis.nBits);
 
     while (genesis.GetPoWHash() > powLimit) {
         printf("\r%08x", genesis.nNonce);
@@ -174,7 +177,7 @@ public:
         nDefaultPort = 7979;
 
         genesis = CreateGenesisBlock(1680947030, 3703410, "Pilot applauded for his courage after finding a cobra in the cockpit mid-flight");
-        SolveAlternateGenesis(genesis, 1731146578, consensus.powLimit);
+        SolveAlternateGenesis(genesis, 1731146578);
         consensus.hashGenesisBlock = genesis.GetHash();
 //      assert(genesis.hashMerkleRoot == uint256("3df22896ffc77d8d740ac3b9925ba899e21d165d5ac4c2780a44fdecd9f99967"));
 //      assert(consensus.hashGenesisBlock == uint256("17121853915c8e6036c3b813cae096312b8ffaff3b33b51a770e22c357c6b895"));
